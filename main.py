@@ -4,7 +4,7 @@ import numpy as np
 
 import utils
 
-import generate_and_test
+from generate_and_test import gen_and_test
 import greedy_search
 import simulated_annealing
 import genetic_algorithm
@@ -23,7 +23,16 @@ dataset.Weights = dataset.Weights.apply(lambda x : string_to_list(x))
 dataset.Prices = dataset.Prices.apply(lambda x : string_to_list(x))
 dataset['Best picks'] = dataset['Best picks'].apply(lambda x : string_to_list(x))
 
-generate_and_test.run()
-greedy_search.run()
-simulated_annealing.run()
-genetic_algorithm.run()
+def generate_and_test_run():
+    solutions = []
+    for _, row in dataset.iterrows():
+        target = row['Best price']
+        solution, indexes = gen_and_test(row)
+        solutions.append(1 if target == solution else 0)
+    # Accuracy
+    print('Accuracy of best prices found is', np.mean(solutions))
+
+generate_and_test_run()
+#greedy_search.run()
+#simulated_annealing.run()
+#genetic_algorithm.run()
